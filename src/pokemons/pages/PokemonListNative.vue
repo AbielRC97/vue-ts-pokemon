@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import PokemonCardList from '@/pokemons/components/PokemonCardList.vue';
 import store from '@/stores/store';
-
 </script>
 
 <template>

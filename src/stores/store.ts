@@ -1,5 +1,6 @@
 import { reactive } from "vue";
 import type { Pokemon } from "@/pokemons/interfaces";
+import { getPokemons } from "@/pokemons/helpers/get-pokemons";
 
 interface Store {
     //State: 
@@ -11,7 +12,7 @@ interface Store {
         errorMessage?: string | null;
     },
     // Actions:
-    start: () => void;
+    start: () => Promise<void>;
     loaded: (pokemons: Pokemon[]) => void;
     error: (errorMessage: string | null) => void;
 }
@@ -24,9 +25,27 @@ const store = reactive<Store>({
         hasError: false,
         errorMessage: null,
     },
-    start: function () { },
-    loaded: function (pokemons: Pokemon[]) { },
-    error: function (errorMessage: string | null) { }
+    start: async function (): Promise<void> {
+        const data = await getPokemons();
+        this.loaded(data);
+    },
+    loaded: function (pokemons: Pokemon[]) {
+        this.pokemons = {
+            list: pokemons,
+            count: pokemons.length,
+            isLoading: false,
+            hasError: false,
+            errorMessage: null
+        }
+    },
+    error: function (errorMessage: string | null) {
+        this.pokemons = {
+            ...this.pokemons,
+            isLoading: false,
+            hasError: true,
+            errorMessage: errorMessage
+        }
+    }
 
 });
 

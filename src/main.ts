@@ -5,7 +5,9 @@ import App from './App.vue'
 import router from './router'
 import { VueQueryPlugin } from '@tanstack/vue-query';
 
+import store from '@/stores/store';
 
+store.start();
 
 const app = createApp(App)
 
